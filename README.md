@@ -1,5 +1,6 @@
 # PulseSensor_Amped_Processing_Visualizer
 Processing code for pulse wave visualization
+![Picture]()
 
 Take the folder called 'PulseSensorAmpd_Processing_1dot1' and place it in your
 Documents/Processing 
