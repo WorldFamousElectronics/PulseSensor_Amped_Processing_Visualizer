@@ -2,6 +2,10 @@
 Processing code for pulse wave visualization
 ![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/ScreenShot.png)
 
+# Images
+![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/EarClip.png)
+![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/FingerStrap.png)
+
 
 # Important
 Take the folder called 'PulseSensorAmpd_Processing_1dot1' and place it in your
