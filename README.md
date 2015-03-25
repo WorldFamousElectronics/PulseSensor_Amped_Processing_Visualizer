@@ -1,4 +1,4 @@
-# PulseSensor_Amped_Processing_Visualizer
+# PulseSensor Processing Visualizer
 Processing code for pulse wave visualization
 ![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/ScreenShot.png)
 
