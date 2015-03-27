@@ -6,7 +6,7 @@ Processing code for pulse wave visualization
 ![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/ScreenShot.png)
 
 
-## Install Note
+## Installation
 1.  "Download ZIP".
 2.  Take the folder called 'PulseSensorAmpd_Processing_1dot1' and place it in your
 Documents/Processing folder.
@@ -14,7 +14,7 @@ Documents/Processing folder.
 4.  Then open or restart Processing to access the code through your Sketch folder.
 
 
-## Installation
+## Arduino Code "serialVisual" to "false"
 1. Before running this program, install our <a href="https://github.com/WorldFamousElectronics/PulseSensor_Amped_Arduinor"> "Pulse Sensor Arduino Code"</a>
 ![ScreenShot](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Arduino/blob/master/pics/ScreenCapArduino.png) 
 
@@ -25,7 +25,7 @@ Documents/Processing folder.
 static boolean serialVisual = true;   // Set to 'true' by Default. 
 
 ```
-too:
+to:
 ```
 // Regards Serial OutPut  -- Set This Up to your needs
 static boolean serialVisual = false;   // Re-set to 'false' to sendDataToSerial instead. : ) 
