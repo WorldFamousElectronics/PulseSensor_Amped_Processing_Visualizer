@@ -3,9 +3,16 @@
 
 
 void serialEvent(Serial port){ 
+
    String inData = port.readStringUntil('\n');
+   if(inData.length() <= 0) {
+     return;
+   }
    inData = trim(inData);                 // cut off white space (carriage return)
    
+   if(inData.length() <= 0) {
+     return;
+   }
    if (inData.charAt(0) == 'S'){          // leading 'S' for sensor data
      inData = inData.substring(1);        // cut off the leading 'S'
      Sensor = int(inData);                // convert the string to usable int
