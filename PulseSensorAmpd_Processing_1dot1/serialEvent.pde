@@ -3,13 +3,11 @@
 
 
 void serialEvent(Serial port){ 
-
    String inData = port.readStringUntil('\n');
-   if(inData.length() <= 0) {
+   if(inData == null) {
      return;
    }
-   inData = trim(inData);                 // cut off white space (carriage return)
-   
+   inData = trim(inData);                 // cut off white space (carriage return)   
    if(inData.length() <= 0) {
      return;
    }
