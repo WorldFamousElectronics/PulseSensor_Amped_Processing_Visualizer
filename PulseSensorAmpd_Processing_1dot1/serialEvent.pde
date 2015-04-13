@@ -4,7 +4,16 @@
 
 void serialEvent(Serial port){ 
    String inData = port.readStringUntil('\n');
+ 
+   if (inData == null) {                 // bail if we didn't get anything
+     return;
+   }
+   
    inData = trim(inData);                 // cut off white space (carriage return)
+   
+   if (inData.isEmpty()) {                // bail if we got an empty line
+     return;
+   }
    
    if (inData.charAt(0) == 'S'){          // leading 'S' for sensor data
      inData = inData.substring(1);        // cut off the leading 'S'
