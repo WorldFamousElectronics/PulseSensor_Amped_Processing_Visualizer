@@ -10,7 +10,8 @@ void serialEvent(Serial port){
    }   
    if (inData.isEmpty()) {                // bail if we got an empty line
      return;
-   } 
+   }
+
    inData = trim(inData);                 // cut off white space (carriage return)   
    if(inData.length() <= 0) {             // bail if there's nothing there
      return;
