@@ -3,6 +3,8 @@ THIS PROGRAM WORKS WITH PulseSensorAmped_Arduino-xx ARDUINO CODE
 THE PULSE DATA WINDOW IS SCALEABLE WITH SCROLLBAR AT BOTTOM OF SCREEN
 PRESS 'S' OR 's' KEY TO SAVE A PICTURE OF THE SCREEN IN SKETCH FOLDER (.jpg)
 MADE BY JOEL MURPHY AUGUST, 2012
+Updated with HRV display by Elliot Mebane, Roguish, Inc. Feb 2016
+HRV requires 1 minute of data before it's accurate. 
 */
 
 
@@ -15,9 +17,12 @@ Serial port;
 int Sensor;      // HOLDS PULSE SENSOR DATA FROM ARDUINO
 int IBI;         // HOLDS TIME BETWEN HEARTBEATS FROM ARDUINO
 int BPM;         // HOLDS HEART RATE VALUE FROM ARDUINO
+int HRV;         // HRV. Log RMSSD. Scale from about 0 - 20;
+int STDDEV;      // Standard Deviation
 int[] RawY;      // HOLDS HEARTBEAT WAVEFORM DATA BEFORE SCALING
 int[] ScaledY;   // USED TO POSITION SCALED HEARTBEAT WAVEFORM
 int[] rate;      // USED TO POSITION BPM DATA WAVEFORM
+int[] hrv;
 float zoom;      // USED WHEN SCALING PULSE WAVEFORM TO PULSE WINDOW
 float offset;    // USED WHEN SCALING PULSE WAVEFORM TO PULSE WINDOW
 color eggshell = color(255, 253, 248);
@@ -27,8 +32,9 @@ int PulseWindowWidth = 490;
 int PulseWindowHeight = 512; 
 int BPMWindowWidth = 180;
 int BPMWindowHeight = 340;
+int HRVWindowWidth = 180; // Number of graph points to display in the horizontal space. 
+int HRVWindowHeight = 340;
 boolean beat = false;    // set when a heart beat is detected, then cleared when the BPM graph is advanced
-
 
 void setup() {
   size(700, 600);  // Stage size
@@ -43,6 +49,7 @@ void setup() {
   RawY = new int[PulseWindowWidth];          // initialize raw pulse waveform array
   ScaledY = new int[PulseWindowWidth];       // initialize scaled pulse waveform array
   rate = new int [BPMWindowWidth];           // initialize BPM waveform array
+  hrv = new int[HRVWindowWidth];             // initialize the HRV waveform array
   zoom = 0.75;                               // initialize scale of heartbeat window
     
 // set the visualizer lines to 0
@@ -52,11 +59,14 @@ void setup() {
  for (int i=0; i<RawY.length; i++){
     RawY[i] = height/2; // initialize the pulse window data line to V/2
  }
+ for (int i=0; i<hrv.length; i++){
+   hrv[i] = height/2;   // initialize the hrv window data line to height/2
+ }
    
 // GO FIND THE ARDUINO
-  println(Serial.list());    // print a list of available serial ports
+  println(Serial.list());        // print a list of available serial ports
   // choose the number between the [] that is connected to the Arduino
-  port = new Serial(this, Serial.list()[9], 115200);  // make sure Arduino is talking serial at this baud rate
+  port = new Serial(this, Serial.list()[2], 115200);  // make sure Arduino is talking serial at this baud rate
   port.clear();            // flush buffer
   port.bufferUntil('\n');  // set buffer full flag on receipt of carriage return
 }
@@ -90,7 +100,7 @@ void draw() {
 // DRAW THE BPM WAVE FORM
 // first, shift the BPM waveform over to fit then next data point only when a beat is found
  if (beat == true){   // move the heart rate line over one pixel every time the heart beats 
-   beat = false;      // clear beat flag (beat flag waset in serialEvent tab)
+   // beat = false;      // (moved to later) clear beat flag (beat flag was set in serialEvent tab)
    for (int i=0; i<rate.length-1; i++){
      rate[i] = rate[i+1];                  // shift the bpm Y coordinates over one pixel to the left
    }
@@ -101,13 +111,34 @@ void draw() {
  } 
  // GRAPH THE HEART RATE WAVEFORM
  stroke(250,0,0);                          // color of heart rate graph
- strokeWeight(2);                          // thicker line is easier to read
+ strokeWeight(1);  // 2                    // thicker line is easier to read
  noFill();
  beginShape();
  for (int i=0; i < rate.length-1; i++){    // variable 'i' will take the place of pixel x position   
    vertex(i+510, rate[i]);                 // display history of heart rate datapoints
  }
  endShape();
+ 
+ // HRV 
+ // first, shift the HRV waveform over to fit then next data point only when a beat is found
+ if (beat == true){   // move the heart rate line over one pixel every time the heart beats 
+   for (int i=0; i<hrv.length-1; i++){
+     hrv[i] = hrv[i+1];                  
+   }
+   HRV = min(HRV,100);        
+   float dummy = map( HRV,0,100,555,215);   
+   hrv[hrv.length-1] = int(dummy);       
+ }
+ stroke(0,0,250);                          // color of heart rate variance graph
+ strokeWeight(1);  // 2                    
+ noFill();
+ beginShape();
+ for (int i=0; i < hrv.length-1; i++){    // variable 'i' will take the place of pixel x position   
+   vertex(i+510, hrv[i]);                 // display history of heart rate datapoints
+ }
+ endShape();
+
+ beat = false;                             // this line moved here during HRV addition
  
 // DRAW THE HEART AND MAYBE MAKE IT BEAT
   fill(250,0,0);
@@ -123,12 +154,15 @@ void draw() {
   bezier(width-100,50, width-190,-20, width-200,140, width-100,150);
   strokeWeight(1);          // reset the strokeWeight for next time
 
-
 // PRINT THE DATA AND VARIABLE VALUES
   fill(eggshell);                                       // get ready to print text
   text("Pulse Sensor Amped Visualizer 1.1",245,30);     // tell them what you are
   text("IBI " + IBI + "mS",600,585);                    // print the time between heartbeats in mS
-  text(BPM + " BPM",600,200);                           // print the Beats Per Minute
+  fill(255,0,0);                                        
+  text(BPM + " BPM",600,180);                           // print the Beats Per Minute
+  fill(0,0,255);                                       
+  text(HRV + " HRV",600,205);                           // print the HRV
+  fill(eggshell);                                        
   text("Pulse Window Scale " + nf(zoom,1,2), 150, 585); // show the current scale of Pulse Window
   
 //  DO THE SCROLLBAR THINGS
@@ -137,6 +171,3 @@ void draw() {
   
 //   
 }  //end of draw loop
-
-
-
