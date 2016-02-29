@@ -30,4 +30,8 @@ void serialEvent(Serial port){
      inData = inData.substring(1);        // cut off the leading 'Q'
      IBI = int(inData);                   // convert the string to usable int
    }
+   if (inData.charAt(0) == 'H'){          // leading 'H' for HRV data
+     inData = inData.substring(1);        // cut off the leading 'H'
+     HRV = int(inData);                   // convert the string to usable int
+   }
 }
