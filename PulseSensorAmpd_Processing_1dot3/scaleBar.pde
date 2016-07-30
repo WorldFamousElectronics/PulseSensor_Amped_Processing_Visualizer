@@ -11,7 +11,7 @@ class Scrollbar{
  boolean rollover;      // true when the mouse is over
  boolean locked;        // true when it's the active scrollbar
  float minVal, maxVal;  // min and max values for the thumb
- 
+
  Scrollbar (int xp, int yp, int w, int h, float miv, float mav){ // values passed from the constructor
   x = xp;
   y = yp;
@@ -21,9 +21,9 @@ class Scrollbar{
   maxVal = mav;
   pos = x - sh/2;
   posMin = x-sw/2;
-  posMax = x + sw/2;  // - sh; 
+  posMax = x + sw/2;  // - sh;
  }
- 
+
  // updates the 'over' boolean and position of thumb
  void update(int mx, int my) {
    if (over(mx, my) == true){
@@ -44,12 +44,12 @@ class Scrollbar{
     locked = false;
    }
  }
- 
+
  // resets the scrollbar to neutral
  void release(){
-  locked = false; 
+  locked = false;
  }
- 
+
  // returns true if the cursor is over the scrollbar
  boolean over(int mx, int my){
   if ((mx > x-sw/2) && (mx < x+sw/2) && (my > y-sh/2) && (my < y+sh/2)){
@@ -58,7 +58,7 @@ class Scrollbar{
    return false;
   }
  }
- 
+
  // draws the scrollbar on the screen
  void display (){
 
@@ -66,20 +66,19 @@ class Scrollbar{
   fill(255);
   rect(x, y, sw, sh);      // create the scrollbar
   fill (250,0,0);
-  if ((rollover == true) || (locked == true)){             
+  if ((rollover == true) || (locked == true)){
    stroke(250,0,0);
    strokeWeight(8);           // make the scale dot bigger if you're on it
   }
   ellipse(pos, y, sh, sh);     // create the scaling dot
   strokeWeight(1);            // reset strokeWeight
  }
- 
+
  // returns the current value of the thumb
  float getPos() {
   float scalar = sw / sw;  // (sw - sh/2);
   float ratio = (pos-(x-sw/2)) * scalar;
   float p = minVal + (ratio/sw * (maxVal - minVal));
   return p;
- } 
  }
- 
+ }
