@@ -4,11 +4,12 @@
 ## PulseSensor Processing Visualizer
 Processing code for pulse wave visualization
 ![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/ScreenShot.png)
-
+New with verison 1.4, a USB Port Selection screen GUI. 😎
+![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/USB_Select_ScreenShot.png]
 
 ## Installation
 1.  "Download ZIP".
-2.  Take the folder called 'PulseSensorAmpd_Processing_1dot1' and place it in your
+2.  Take the folder called 'PulseSensorAmpd_Processing_1dot4' and place it in your
 Documents/Processing folder.
 3.  UnZip file in the folder. 
 4.  Then open or restart Processing to access the code through your Sketch folder.
