@@ -5,7 +5,7 @@
 Processing code for pulse wave visualization
 ![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/ScreenShot.png)
 New with verison 1.4, a USB Port Selection screen GUI. 😎
-![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/USB_Select_ScreenShot.png]
+![Picture](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Processing_Visualizer/blob/master/USB_Select_ScreenShot.png)
 
 ## Installation
 1.  "Download ZIP".
