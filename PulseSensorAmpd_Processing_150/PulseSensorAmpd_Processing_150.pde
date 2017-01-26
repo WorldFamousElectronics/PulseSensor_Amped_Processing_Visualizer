@@ -1,9 +1,10 @@
 /*
-THIS PROGRAM WORKS WITH PulseSensorAmped_Arduino-xx ARDUINO CODE
+THIS PROGRAM WORKS WITH PulseSensorAmped_Arduino ARDUINO CODE
 THE PULSE DATA WINDOW IS SCALEABLE WITH SCROLLBAR AT BOTTOM OF SCREEN
 PRESS 'S' OR 's' KEY TO SAVE A PICTURE OF THE SCREEN IN SKETCH FOLDER (.jpg)
 MADE BY JOEL MURPHY AUGUST, 2012
-UPDATED BY JOEL MURPHY JULY 2016 WITH SERIAL PORT LOCATOR TOOL
+UPDATED BY JOEL MURPHY SUMMER 2016 WITH SERIAL PORT LOCATOR TOOL
+UPDATED BY JOEL MURPHY WINTER 2017 WITH IMPROVED SERIAL PORT SELECTOR TOOL
 
 THIS CODE PROVIDED AS IS, WITH NO CLAIMS OF FUNCTIONALITY OR EVEN IF IT WILL WORK
       WYSIWYG
@@ -38,8 +39,9 @@ boolean beat = false;    // set when a heart beat is detected, then cleared when
 String serialPort;
 String[] serialPorts = new String[Serial.list().length];
 boolean serialPortFound = false;
-Radio[] button = new Radio[Serial.list().length];
-
+Radio[] button = new Radio[Serial.list().length*2];
+int numPorts = serialPorts.length;
+boolean refreshPorts = false;
 
 void setup() {
   size(700, 600);  // Stage size
@@ -88,7 +90,7 @@ if(serialPortFound){
   drawHeart();
 // PRINT THE DATA AND VARIABLE VALUES
   fill(eggshell);                                       // get ready to print text
-  text("Pulse Sensor Amped Visualizer",245,30);     // tell them what you are
+  text("Pulse Sensor Amped Visualizer v1.5",245,30);    // tell them what you are
   text("IBI " + IBI + "mS",600,585);                    // print the time between heartbeats in mS
   text(BPM + " BPM",600,200);                           // print the Beats Per Minute
   text("Pulse Window Scale " + nf(zoom,1,2), 150, 585); // show the current scale of Pulse Window
@@ -99,7 +101,14 @@ if(serialPortFound){
 
 } else { // SCAN BUTTONS TO FIND THE SERIAL PORT
 
-  for(int i=0; i<button.length; i++){
+  if(refreshPorts){
+    refreshPorts = false;
+    drawDataWindows();
+    drawHeart();
+    listAvailablePorts();
+  }
+
+  for(int i=0; i<numPorts+1; i++){
     button[i].overRadio(mouseX,mouseY);
     button[i].displayRadio();
   }
@@ -184,11 +193,17 @@ void listAvailablePorts(){
   textAlign(LEFT);
   // set a counter to list the ports backwards
   int yPos = 0;
-  for(int i=serialPorts.length-1; i>=0; i--){
+
+  for(int i=numPorts-1; i>=0; i--){
     button[i] = new Radio(35, 95+(yPos*20),12,color(180),color(80),color(255),i,button);
     text(serialPorts[i],50, 100+(yPos*20));
     yPos++;
   }
+  int p = numPorts;
+   fill(233,55,237);
+  button[p] = new Radio(35, 95+(yPos*20),12,color(180),color(80),color(255),p,button);
+    text("Refresh Serial Ports List",50, 100+(yPos*20));
+
   textFont(font);
   textAlign(CENTER);
 }
