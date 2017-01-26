@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class PulseSensorAmpd_Processing_1dot3 extends PApplet {
+public class PulseSensorAmpd_Processing_1_5_0 extends PApplet {
 
 /*
 THIS PROGRAM WORKS WITH PulseSensorAmped_Arduino-xx ARDUINO CODE
@@ -56,8 +56,9 @@ boolean beat = false;    // set when a heart beat is detected, then cleared when
 String serialPort;
 String[] serialPorts = new String[Serial.list().length];
 boolean serialPortFound = false;
-Radio[] button = new Radio[Serial.list().length];
-
+Radio[] button = new Radio[Serial.list().length+1];
+int numPorts = Serial.list().length;
+boolean refreshPorts = false;
 
 public void setup() {
     // Stage size
@@ -116,6 +117,12 @@ if(serialPortFound){
   scaleBar.display();
 
 } else { // SCAN BUTTONS TO FIND THE SERIAL PORT
+
+  if(refreshPorts){
+    drawDataWindows();
+    drawHeart();
+    listAvailablePorts();
+  }
 
   for(int i=0; i<button.length; i++){
     button[i].overRadio(mouseX,mouseY);
@@ -196,6 +203,18 @@ public void drawHeart(){
 
 public void listAvailablePorts(){
   println(Serial.list());    // print a list of available serial ports to the console
+  if(refreshPorts){
+    refreshPorts = false;
+    if(Serial.list().length != numPorts){
+      if(Serial.list().length > numPorts){
+        for(int i=numPorts; i<Serial.list().length; i++){
+          append(serialPorts,Serial.list()[i]);
+        }
+      }
+    }
+  }
+
+
   serialPorts = Serial.list();
   fill(0);
   textFont(font,16);
@@ -207,6 +226,10 @@ public void listAvailablePorts(){
     text(serialPorts[i],50, 100+(yPos*20));
     yPos++;
   }
+  int p = serialPorts.length;
+  button[p] = new Radio(35, 95+(yPos*20),12,color(180),color(80),color(255),p,button);
+    text("Refresh Serial Ports List",50, 100+(yPos*20));
+
   textFont(font);
   textAlign(CENTER);
 }
@@ -216,6 +239,11 @@ public void mousePressed(){
   if(!serialPortFound){
     for(int i=0; i<button.length; i++){
       if(button[i].pressRadio(mouseX,mouseY)){
+        if(i == serialPorts.length){
+          refreshPorts = true;
+          return;
+        }else
+        
         try{
           port = new Serial(this, Serial.list()[i], 115200);  // make sure Arduino is talking serial at this baud rate
           delay(1000);
@@ -426,7 +454,7 @@ try{
 }
   public void settings() {  size(700, 600); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "PulseSensorAmpd_Processing_1dot3" };
+    String[] appletArgs = new String[] { "PulseSensorAmpd_Processing_1_5_0" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
