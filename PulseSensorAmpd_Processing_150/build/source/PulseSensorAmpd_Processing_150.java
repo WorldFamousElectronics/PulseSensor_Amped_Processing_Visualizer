@@ -14,14 +14,15 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class PulseSensorAmpd_Processing_1_5_0 extends PApplet {
+public class PulseSensorAmpd_Processing_150 extends PApplet {
 
 /*
-THIS PROGRAM WORKS WITH PulseSensorAmped_Arduino-xx ARDUINO CODE
+THIS PROGRAM WORKS WITH PulseSensorAmped_Arduino ARDUINO CODE
 THE PULSE DATA WINDOW IS SCALEABLE WITH SCROLLBAR AT BOTTOM OF SCREEN
 PRESS 'S' OR 's' KEY TO SAVE A PICTURE OF THE SCREEN IN SKETCH FOLDER (.jpg)
 MADE BY JOEL MURPHY AUGUST, 2012
-UPDATED BY JOEL MURPHY JULY 2016 WITH SERIAL PORT LOCATOR TOOL
+UPDATED BY JOEL MURPHY SUMMER 2016 WITH SERIAL PORT LOCATOR TOOL
+UPDATED BY JOEL MURPHY WINTER 2017 WITH IMPROVED SERIAL PORT SELECTOR TOOL
 
 THIS CODE PROVIDED AS IS, WITH NO CLAIMS OF FUNCTIONALITY OR EVEN IF IT WILL WORK
       WYSIWYG
@@ -56,8 +57,8 @@ boolean beat = false;    // set when a heart beat is detected, then cleared when
 String serialPort;
 String[] serialPorts = new String[Serial.list().length];
 boolean serialPortFound = false;
-Radio[] button = new Radio[Serial.list().length+1];
-int numPorts = Serial.list().length;
+Radio[] button = new Radio[Serial.list().length*2];
+int numPorts = serialPorts.length;
 boolean refreshPorts = false;
 
 public void setup() {
@@ -107,7 +108,7 @@ if(serialPortFound){
   drawHeart();
 // PRINT THE DATA AND VARIABLE VALUES
   fill(eggshell);                                       // get ready to print text
-  text("Pulse Sensor Amped Visualizer",245,30);     // tell them what you are
+  text("Pulse Sensor Amped Visualizer v1.5",245,30);    // tell them what you are
   text("IBI " + IBI + "mS",600,585);                    // print the time between heartbeats in mS
   text(BPM + " BPM",600,200);                           // print the Beats Per Minute
   text("Pulse Window Scale " + nf(zoom,1,2), 150, 585); // show the current scale of Pulse Window
@@ -118,13 +119,16 @@ if(serialPortFound){
 
 } else { // SCAN BUTTONS TO FIND THE SERIAL PORT
 
+  autoScanPorts();
+
   if(refreshPorts){
+    refreshPorts = false;
     drawDataWindows();
     drawHeart();
     listAvailablePorts();
   }
 
-  for(int i=0; i<button.length; i++){
+  for(int i=0; i<numPorts+1; i++){
     button[i].overRadio(mouseX,mouseY);
     button[i].displayRadio();
   }
@@ -203,30 +207,20 @@ public void drawHeart(){
 
 public void listAvailablePorts(){
   println(Serial.list());    // print a list of available serial ports to the console
-  if(refreshPorts){
-    refreshPorts = false;
-    if(Serial.list().length != numPorts){
-      if(Serial.list().length > numPorts){
-        for(int i=numPorts; i<Serial.list().length; i++){
-          append(serialPorts,Serial.list()[i]);
-        }
-      }
-    }
-  }
-
-
   serialPorts = Serial.list();
   fill(0);
   textFont(font,16);
   textAlign(LEFT);
   // set a counter to list the ports backwards
   int yPos = 0;
-  for(int i=serialPorts.length-1; i>=0; i--){
+
+  for(int i=numPorts-1; i>=0; i--){
     button[i] = new Radio(35, 95+(yPos*20),12,color(180),color(80),color(255),i,button);
     text(serialPorts[i],50, 100+(yPos*20));
     yPos++;
   }
-  int p = serialPorts.length;
+  int p = numPorts;
+   fill(233,0,0);
   button[p] = new Radio(35, 95+(yPos*20),12,color(180),color(80),color(255),p,button);
     text("Refresh Serial Ports List",50, 100+(yPos*20));
 
@@ -234,16 +228,44 @@ public void listAvailablePorts(){
   textAlign(CENTER);
 }
 
+public void autoScanPorts(){
+  if(Serial.list().length != numPorts){
+    if(Serial.list().length > numPorts){
+      println("New Ports Opened!");
+      int diff = Serial.list().length - numPorts;	// was serialPorts.length
+      serialPorts = expand(serialPorts,diff);
+      numPorts = Serial.list().length;
+    }else if(Serial.list().length < numPorts){
+      println("Some Ports Closed!");
+      numPorts = Serial.list().length;
+    }
+    refreshPorts = true;
+    return;
+  }
+}
+
 public void mousePressed(){
   scaleBar.press(mouseX, mouseY);
   if(!serialPortFound){
-    for(int i=0; i<button.length; i++){
+    for(int i=0; i<=numPorts; i++){
       if(button[i].pressRadio(mouseX,mouseY)){
-        if(i == serialPorts.length){
+        if(i == numPorts){
+          if(Serial.list().length > numPorts){
+            println("New Ports Opened!");
+            int diff = Serial.list().length - numPorts;	// was serialPorts.length
+            serialPorts = expand(serialPorts,diff);
+            //button = (Radio[]) expand(button,diff);
+            numPorts = Serial.list().length;
+          }else if(Serial.list().length < numPorts){
+            println("Some Ports Closed!");
+            numPorts = Serial.list().length;
+          }else if(Serial.list().length == numPorts){
+            return;
+          }
           refreshPorts = true;
           return;
         }else
-        
+
         try{
           port = new Serial(this, Serial.list()[i], 115200);  // make sure Arduino is talking serial at this baud rate
           delay(1000);
@@ -254,6 +276,12 @@ public void mousePressed(){
         }
         catch(Exception e){
           println("Couldn't open port " + Serial.list()[i]);
+          fill(255,0,0);
+          textFont(font,16);
+          textAlign(LEFT);
+          text("Couldn't open port " + Serial.list()[i],60,70);
+          textFont(font);
+          textAlign(CENTER);
         }
       }
     }
@@ -285,7 +313,7 @@ class Radio {
   boolean over, pressed;
   int me;
   Radio[] radios;
-  
+
   Radio(int xp, int yp, int s, int b, int o, int p, int m, Radio[] r) {
     _x = xp;
     _y = yp;
@@ -297,11 +325,11 @@ class Radio {
     radios = r;
     me = m;
   }
-  
+
   public boolean pressRadio(float mx, float my){
     if (dist(_x, _y, mx, my) < size/2){
       pressed = true;
-      for(int i=0; i<radios.length; i++){
+      for(int i=0; i<numPorts+1; i++){
         if(i != me){ radios[i].pressed = false; }
       }
       return true;
@@ -309,19 +337,20 @@ class Radio {
       return false;
     }
   }
-  
+
   public boolean overRadio(float mx, float my){
     if (dist(_x, _y, mx, my) < size/2){
       over = true;
-      for(int i=0; i<radios.length; i++){
+      for(int i=0; i<numPorts+1; i++){
         if(i != me){ radios[i].over = false; }
       }
       return true;
     } else {
+      over = false;
       return false;
     }
   }
-  
+
   public void displayRadio(){
     noStroke();
     fill(baseColor);
@@ -336,10 +365,6 @@ class Radio {
     }
   }
 }
-    
-    
-    
-      
 
 /*
     THIS SCROLLBAR OBJECT IS BASED ON THE ONE FROM THE BOOK "Processing" by Reas and Fry
@@ -433,7 +458,7 @@ try{
    String inData = port.readStringUntil('\n');
    inData = trim(inData);                 // cut off white space (carriage return)
 
-   if (inData.charAt(0) == 'S'){          // leading 'S' for sensor data
+  if (inData.charAt(0) == 'S'){           // leading 'S' means Pulse Sensor data packet
      inData = inData.substring(1);        // cut off the leading 'S'
      Sensor = PApplet.parseInt(inData);                // convert the string to usable int
    }
@@ -454,7 +479,7 @@ try{
 }
   public void settings() {  size(700, 600); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "PulseSensorAmpd_Processing_1_5_0" };
+    String[] appletArgs = new String[] { "PulseSensorAmpd_Processing_150" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

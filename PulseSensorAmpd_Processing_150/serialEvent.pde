@@ -7,7 +7,7 @@ try{
    String inData = port.readStringUntil('\n');
    inData = trim(inData);                 // cut off white space (carriage return)
 
-   if (inData.charAt(0) == 'S'){          // leading 'S' for sensor data
+  if (inData.charAt(0) == 'S'){           // leading 'S' means Pulse Sensor data packet
      inData = inData.substring(1);        // cut off the leading 'S'
      Sensor = int(inData);                // convert the string to usable int
    }
