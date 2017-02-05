@@ -23,7 +23,7 @@ class Radio {
   boolean pressRadio(float mx, float my){
     if (dist(_x, _y, mx, my) < size/2){
       pressed = true;
-      for(int i=0; i<numPorts+1; i++){	// need to add +1 here?
+      for(int i=0; i<numPorts+1; i++){
         if(i != me){ radios[i].pressed = false; }
       }
       return true;

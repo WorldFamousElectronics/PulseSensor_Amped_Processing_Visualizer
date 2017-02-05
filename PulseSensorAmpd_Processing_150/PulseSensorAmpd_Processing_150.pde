@@ -101,6 +101,8 @@ if(serialPortFound){
 
 } else { // SCAN BUTTONS TO FIND THE SERIAL PORT
 
+  autoScanPorts();
+
   if(refreshPorts){
     refreshPorts = false;
     drawDataWindows();
@@ -200,10 +202,26 @@ void listAvailablePorts(){
     yPos++;
   }
   int p = numPorts;
-   fill(233,55,237);
+   fill(233,0,0);
   button[p] = new Radio(35, 95+(yPos*20),12,color(180),color(80),color(255),p,button);
     text("Refresh Serial Ports List",50, 100+(yPos*20));
 
   textFont(font);
   textAlign(CENTER);
+}
+
+void autoScanPorts(){
+  if(Serial.list().length != numPorts){
+    if(Serial.list().length > numPorts){
+      println("New Ports Opened!");
+      int diff = Serial.list().length - numPorts;	// was serialPorts.length
+      serialPorts = expand(serialPorts,diff);
+      numPorts = Serial.list().length;
+    }else if(Serial.list().length < numPorts){
+      println("Some Ports Closed!");
+      numPorts = Serial.list().length;
+    }
+    refreshPorts = true;
+    return;
+  }
 }
