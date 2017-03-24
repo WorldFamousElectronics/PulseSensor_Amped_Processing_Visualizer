@@ -1,8 +1,8 @@
 ![logo](https://avatars0.githubusercontent.com/u/7002937?v=3&s=200)
 
 
-## PulseSensor Processing Visualizer
-Processing code for pulse wave visualization
+## <a href="http://arduino.cc/"> "Processing Visualization"</a> & <a href="http://www.pulsesensor.com">PulseSensor</a>
+
 ![Picture](pics/ScreenShot.png)
 
 ## Upload Arduino Sketch To Your Microcontroller
