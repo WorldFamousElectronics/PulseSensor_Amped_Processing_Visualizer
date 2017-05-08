@@ -2,6 +2,7 @@
 THIS PROGRAM WORKS WITH PulseSensorAmped_Arduino ARDUINO CODE
 THE PULSE DATA WINDOW IS SCALEABLE WITH SCROLLBAR AT BOTTOM OF SCREEN
 PRESS 'S' OR 's' KEY TO SAVE A PICTURE OF THE SCREEN IN SKETCH FOLDER (.jpg)
+PRESS 'R' OR 'r' KEY TO RESET THE DATA TRACES
 MADE BY JOEL MURPHY AUGUST, 2012
 UPDATED BY JOEL MURPHY SUMMER 2016 WITH SERIAL PORT LOCATOR TOOL
 UPDATED BY JOEL MURPHY WINTER 2017 WITH IMPROVED SERIAL PORT SELECTOR TOOL
@@ -10,8 +11,7 @@ THIS CODE PROVIDED AS IS, WITH NO CLAIMS OF FUNCTIONALITY OR EVEN IF IT WILL WOR
       WYSIWYG
 */
 
-
-import processing.serial.*;
+import processing.serial.*;  // serial library lets us talk to Arduino
 PFont font;
 PFont portsFont;
 Scrollbar scaleBar;
@@ -58,16 +58,10 @@ void setup() {
   rate = new int [BPMWindowWidth];           // initialize BPM waveform array
   zoom = 0.75;                               // initialize scale of heartbeat window
 
-// set the visualizer lines to 0
- for (int i=0; i<rate.length; i++){
-    rate[i] = 555;      // Place BPM graph line at bottom of BPM Window
-   }
- for (int i=0; i<RawY.length; i++){
-    RawY[i] = height/2; // initialize the pulse window data line to V/2
- }
+ // set the visualizer lines to 0
+ resetDataTraces();
 
  background(0);
- noStroke();
  // DRAW OUT THE PULSE WINDOW AND BPM WINDOW RECTANGLES
  drawDataWindows();
  drawHeart();
@@ -122,6 +116,7 @@ if(serialPortFound){
 
 void drawDataWindows(){
     // DRAW OUT THE PULSE WINDOW AND BPM WINDOW RECTANGLES
+    noStroke();
     fill(eggshell);  // color for the window background
     rect(255,height/2,PulseWindowWidth,PulseWindowHeight);
     rect(600,385,BPMWindowWidth,BPMWindowHeight);
@@ -195,11 +190,15 @@ void listAvailablePorts(){
   textAlign(LEFT);
   // set a counter to list the ports backwards
   int yPos = 0;
+  int xPos = 35;
+  for(int i=serialPorts.length-1; i>=0; i--){
+    button[i] = new Radio(xPos, 95+(yPos*20),12,color(180),color(80),color(255),i,button);
+    text(serialPorts[i],xPos+15, 100+(yPos*20));
 
-  for(int i=numPorts-1; i>=0; i--){
-    button[i] = new Radio(35, 95+(yPos*20),12,color(180),color(80),color(255),i,button);
-    text(serialPorts[i],50, 100+(yPos*20));
     yPos++;
+    if(yPos > height-30){
+      yPos = 0; xPos+=200;
+    }
   }
   int p = numPorts;
    fill(233,0,0);
@@ -223,5 +222,14 @@ void autoScanPorts(){
     }
     refreshPorts = true;
     return;
+  }
+}
+
+void resetDataTraces(){
+  for (int i=0; i<rate.length; i++){
+     rate[i] = 555;      // Place BPM graph line at bottom of BPM Window
+    }
+  for (int i=0; i<RawY.length; i++){
+     RawY[i] = height/2; // initialize the pulse window data line to V/2
   }
 }
