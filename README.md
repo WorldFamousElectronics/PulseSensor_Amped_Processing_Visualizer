@@ -26,3 +26,10 @@ Then select `PulseSensorAmped_Processing_150`
 The Sketch will launch, and you will be prompted to select the USB port associated with your Arduino board. The list of available ports with auto-update when you plug/unplug USB cables. Use the `Refresh Serial Ports` button to update the ports list if you don't see your Arduino. **Usually**, your Arduino port is at the top of the list! You can also make a note of the port that you used to upload your code in Arduino, since it's the same one. Once you select the right port, you will start seeing hearbeat data!
 
 ![select port](pics/select-port.jpg)
+
+There are a couple of cool things you can do while the sketch is running:
+
+* Press '**s**' or '**S**' to take a screenshot of the program window
+	* The image will be saved in the sketch folder as a .jpg
+
+* Press '**r**' or '**R**' to reset the data windows to zero
