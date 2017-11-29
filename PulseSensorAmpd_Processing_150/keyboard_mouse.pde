@@ -52,7 +52,7 @@ void keyPressed(){
  switch(key){
    case 's':    // pressing 's' or 'S' will take a jpg of the processing window
    case 'S':
-     saveFrame("heartLight-####.jpg");    // take a shot of that!
+     saveFrame("PulseSensor-####.jpg");    // take a shot of that!
      break;
    case 'r':
    case 'R':
