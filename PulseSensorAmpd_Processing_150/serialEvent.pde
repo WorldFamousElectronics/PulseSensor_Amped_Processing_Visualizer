@@ -22,7 +22,7 @@ try{
      IBI = int(inData);                   // convert the string to usable int
    }
 } catch(Exception e) {
-  // println(e.toString());
+  println(e.toString());
 }
 
 }// END OF SERIAL EVENT
