@@ -54,6 +54,10 @@ void keyPressed(){
    case 'S':
      saveFrame("heartLight-####.jpg");    // take a shot of that!
      break;
+   case 'r':
+   case 'R':
+     resetDataTraces();
+     break;
 
    default:
      break;
