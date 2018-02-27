@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class PulseSensorAmpd_Processing_150 extends PApplet {
+public class PulseSensorAmpd_Processing_Visualizer extends PApplet {
 
 /*
 THIS PROGRAM WORKS WITH PulseSensorAmped_Arduino ARDUINO CODE
@@ -305,7 +305,7 @@ public void keyPressed(){
  switch(key){
    case 's':    // pressing 's' or 'S' will take a jpg of the processing window
    case 'S':
-     saveFrame("heartLight-####.jpg");    // take a shot of that!
+     saveFrame("PulseSensor-####.jpg");    // take a shot of that!
      break;
    case 'r':
    case 'R':
@@ -491,7 +491,7 @@ try{
 }// END OF SERIAL EVENT
   public void settings() {  size(700, 600); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "PulseSensorAmpd_Processing_150" };
+    String[] appletArgs = new String[] { "PulseSensorAmpd_Processing_Visualizer" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
