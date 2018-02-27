@@ -6,7 +6,7 @@
 ![Picture](pics/ScreenShot.png)
 
 ## Upload Arduino Sketch To Your Microcontroller
-Before running this program, you have to upload our Pulse Sensor Arduino Sketch to your Arduino board of choice. For details on how to do that, go [here](https://github.com/WorldFamousElectronics/PulseSensor_Amped_Arduino), and follow the `READ_ME` tutorial. In order for your Arduino board to talk to the Pulse Sensor Amped Visualizer, you will need to change a variable in the Arduino code. The variable is called `outputType`, and by default it is set to `SERIAL_PLOTTER`. You need to change it to `PROCESSING_VISUALIZER`. To make this change, go to the main tab of the Arduino Sketch, and change the variable declairation on line 37 as shown below.
+Before running this program, you have to upload our Pulse Sensor Arduino Sketch to your Arduino board of choice. For details on how to do that, go [here](https://pulsesensor.com/pages/getting-advanced). In order for your Arduino board to talk to the Pulse Sensor Amped Visualizer, you will need to change a variable in the Arduino code. The variable is called `outputType`, and by default it is set to `SERIAL_PLOTTER`. You need to change it to `PROCESSING_VISUALIZER`. To make this change, go to the main tab of the Arduino Sketch, and change the variable declairation on line 52 as shown below.
 
 ![outputType declariation](pics/outputType.png)
 
@@ -29,6 +29,7 @@ The Sketch will launch, and you will be prompted to select the USB port associat
 
 There are a couple of cool things you can do while the sketch is running:
 
-* Press 's' or 'S' to take a screenshot of the program window
-  * The image will be saved in the sketch folder as a .jpg
-* Press 'r' or 'R' to reset the data windows to zero
+* Press '**s**' or '**S**' to take a screenshot of the program window
+	* The image will be saved in the sketch folder as a .jpg
+
+* Press '**r**' or '**R**' to reset the data windows to zero
