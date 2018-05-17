@@ -6,7 +6,7 @@
 ![Picture](pics/ScreenShot.png)
 
 ## Upload Arduino Sketch To Your Microcontroller
-Before running this program, you have to upload our Pulse Sensor Arduino Sketch to your Arduino board of choice. For details on how to do that, go [here](https://pulsesensor.com/pages/getting-advanced). In order for your Arduino board to talk to the Pulse Sensor Amped Visualizer, you will need to change a variable in the Arduino code. The variable is called `outputType`, and by default it is set to `SERIAL_PLOTTER`. You need to change it to `PROCESSING_VISUALIZER`. To make this change, go to the main tab of the Arduino Sketch, and change the variable declairation on line 41 as shown below.
+Before running this program, you have to upload our Pulse Sensor Arduino Sketch to your Arduino board of choice. For details on how to do that, go [here](https://pulsesensor.com/pages/getting-advanced). In order for your Arduino board to talk to the Pulse Sensor Amped Visualizer, you will need to change a variable in the Arduino code. The variable is called `outputType`, and by default it is set to `SERIAL_PLOTTER`. You need to change it to `PROCESSING_VISUALIZER`. To make this change, go to the main tab of the Arduino Sketch, and change the variable declairation as shown below.
 
 ![outputType declariation](pics/outputType.png)
 
