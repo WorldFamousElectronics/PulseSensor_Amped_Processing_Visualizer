@@ -5,7 +5,9 @@
 void serialEvent(Serial port){
 try{
    String inData = port.readStringUntil('\n');
+   if (inData == null) return;              // wait for a complete line
    inData = trim(inData);                 // cut off white space (carriage return)
+   if (inData.length() < 2) return;          // require a type and value
 
   if (inData.charAt(0) == 'S'){           // leading 'S' means Pulse Sensor data packet
      inData = inData.substring(1);        // cut off the leading 'S'

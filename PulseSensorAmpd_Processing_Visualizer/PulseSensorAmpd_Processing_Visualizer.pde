@@ -39,7 +39,7 @@ boolean beat = false;    // set when a heart beat is detected, then cleared when
 String serialPort;
 String[] serialPorts = new String[Serial.list().length];
 boolean serialPortFound = false;
-Radio[] button = new Radio[Serial.list().length*2];
+Radio[] button = new Radio[0];
 int numPorts = serialPorts.length;
 boolean refreshPorts = false;
 
@@ -185,6 +185,8 @@ void drawHeart(){
 void listAvailablePorts(){
   println(Serial.list());    // print a list of available serial ports to the console
   serialPorts = Serial.list();
+  numPorts = serialPorts.length;
+  button = new Radio[numPorts+1];  // one button per port, plus Refresh
   fill(0);
   textFont(font,16);
   textAlign(LEFT);
